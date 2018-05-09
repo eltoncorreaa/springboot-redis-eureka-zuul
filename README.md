@@ -1,10 +1,10 @@
 # spring-boot-redis
 A simple Spring-Boot RESTful application with Spring Data JPA, Database Relational and Non-Relational Database with Redis.
 
-To download Redis: 
+# To download Redis: 
 https://redis.io/download
 
-Case use operational system Windows:
+# Case use operational system Windows:
 https://github.com/MicrosoftArchive/redis/releases
 
 To run application: 
@@ -27,3 +27,4 @@ Endpoint Category
 #### TODO
 * update database properties in application.properties (main and test)
 * implement internacionalization
+* implement authentication schema with JWT and Spring Security.
