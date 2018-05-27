@@ -38,9 +38,6 @@ public class ExpenseServiceImplUnitTest {
 	@Mock
 	private CategoryRepositoryRedis categoryRepositoryRedis;
 
-	@Mock
-	private CategoryService categoryService;
-
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 

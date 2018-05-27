@@ -26,14 +26,6 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(CategoryNotFoundException.class)
-	public final ResponseEntity<ExceptionResponse> handleCategoryNotFoundException(final CategoryNotFoundException ex,
-			final WebRequest request) {
-		final ExceptionResponse exceptionResponse = new ExceptionResponse(NOT_FOUND, LocalDateTime.now(),
-				ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-	}
-
 	@ExceptionHandler(OptimisticLockException.class)
 	public final ResponseEntity<ExceptionResponse> handleUserNotFoundException(final OptimisticLockException ex,
 			final WebRequest request) {
