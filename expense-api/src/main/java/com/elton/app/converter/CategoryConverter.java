@@ -23,9 +23,8 @@ public class CategoryConverter {
 	}
 
 	public static List<CategoryDTO> toDTO(final List<Category> listModel){
-		final List<CategoryDTO> results = listModel.stream().map(model -> {
+		return listModel.stream().map(model -> {
 			return toDTO(model);
 		}).collect(Collectors.toList());
-		return results;
 	}
 }
