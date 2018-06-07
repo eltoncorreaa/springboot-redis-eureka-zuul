@@ -20,7 +20,6 @@ import com.elton.app.objectfactory.CategoryMother;
 import com.elton.app.repository.CategoryRepository;
 import com.elton.app.repository.redis.CategoryRepositoryRedis;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class CategoryServiceImplUnitTest {
 
