@@ -1,4 +1,4 @@
-package  com.elton.app.service;
+package com.elton.app.service;
 
 import java.time.LocalDateTime;
 
@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.elton.app.converter.ExpenseConverter;
-import com.elton.app.dto.ExpenseDTO;
 import com.elton.app.exception.ExpenseNotFoundException;
 import com.elton.app.exception.OptimisticLockException;
 import com.elton.app.model.Category;
@@ -36,47 +34,44 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 	@Transactional(readOnly = false)
 	@Override
-	public ExpenseDTO insert(final ExpenseDTO expenseDTO) {
-		final Expense expense = ExpenseConverter.fromDTO(expenseDTO);
-		expense.setCategory(categorizeExpenses(expenseDTO.getDescription()));
-		return ExpenseConverter.toDTO(expenseRepository.save(expense));
+	public Expense insert(final Expense expense) {
+		expense.setCategory(categorizeExpenses(expense.getCategory().getDescription()));
+		return expenseRepository.save(expense);
 	}
 
 	@Transactional(readOnly = false)
 	@Override
-	public ExpenseDTO update(final ExpenseDTO expenseDTO) {
-		final Expense expense = ExpenseConverter.fromDTO(expenseDTO);
-		expense.setCategory(categorizeExpenses(expenseDTO.getDescription()));
+	public Expense update(final Expense expense) {
+		expense.setCategory(categorizeExpenses(expense.getCategory().getDescription()));
 		validateLockOptimistic(expense);
-		return ExpenseConverter.toDTO(expenseRepository.save(expense));
+		return expenseRepository.save(expense);
 	}
 
 	@Override
-	public Page<ExpenseDTO> findExpensesByUserCode(final Long userCode, final Pageable pageable) {
-		final Page<Expense> expenses = expenseRepository.findByUserCodeAndExpenseDateBefore(userCode, getLocalDateTimeMinus5Seconds(), pageable);
+	public Page<Expense> findExpensesByUserCode(final Long userCode, final Pageable pageable) {
+		final Page<Expense> expenses = expenseRepository.findByUserCodeAndExpenseDateBefore(userCode,
+				getLocalDateTimeMinus5Seconds(), pageable);
 		if (expenses.getContent().isEmpty()) {
 			throw new ExpenseNotFoundException("Expenses not found for user with code: " + userCode);
 		}
-		return new PageImpl<>(ExpenseConverter.toDTO(expenses.getContent()), pageable,
-				expenses.getTotalElements());
+		return new PageImpl<>(expenses.getContent(), pageable, expenses.getTotalElements());
 	}
 
 	@Override
-	public Page<ExpenseDTO> findExpensesByFilter(final ExpenseDTO expenseDTO, final Pageable pageable) {
-		final Page<Expense> expenses = expenseRepository.findByUserCodeAndExpenseDateBetween(expenseDTO.getUserCode(),
-				getLocalDateTimeStartTime(expenseDTO.getDate()), getLocalDateEndTime(expenseDTO.getDate()), pageable);
+	public Page<Expense> findExpensesByFilter(final LocalDateTime date, final Long userCode, final Pageable pageable) {
+		final Page<Expense> expenses = expenseRepository.findByUserCodeAndExpenseDateBetween(userCode,
+				getLocalDateTimeStartTime(date), getLocalDateEndTime(date), pageable);
 		if (expenses.getContent().isEmpty()) {
-			throw new ExpenseNotFoundException("Expenses not found for user with code: " + expenseDTO.getUserCode()
-			+ " and date: " + expenseDTO.getDate());
+			throw new ExpenseNotFoundException(
+					"Expenses not found for user with code: " + userCode + " and date: " + date);
 		}
-		return new PageImpl<>(ExpenseConverter.toDTO(expenses.getContent()), pageable,
-				expenses.getTotalElements());
+		return new PageImpl<>(expenses.getContent(), pageable, expenses.getTotalElements());
 	}
 
 	@Transactional(readOnly = false)
 	public Category categorizeExpenses(final String description) {
 		Category category = categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(description);
-		if(category == null) {
+		if (category == null) {
 			category = categoryRepository.findByDescriptionEqualsIgnoreCase(description);
 		}
 		if (description != null && category == null) {

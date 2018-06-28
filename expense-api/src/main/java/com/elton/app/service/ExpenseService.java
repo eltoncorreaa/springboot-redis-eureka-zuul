@@ -1,17 +1,19 @@
 package  com.elton.app.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.elton.app.dto.ExpenseDTO;
+import com.elton.app.model.Expense;
 
 public interface ExpenseService {
 
-	ExpenseDTO insert(ExpenseDTO expenseDTO);
+	Expense insert(Expense expense);
 
-	ExpenseDTO update(ExpenseDTO expenseDTO);
+	Expense update(Expense expense);
 
-	Page<ExpenseDTO> findExpensesByUserCode(Long userCode, Pageable pageable);
+	Page<Expense> findExpensesByUserCode(Long userCode, Pageable pageable);
 
-	Page<ExpenseDTO> findExpensesByFilter(ExpenseDTO expenseDTO, Pageable pageable);
+	Page<Expense> findExpensesByFilter(LocalDateTime date, Long userCode, Pageable pageable);
 }

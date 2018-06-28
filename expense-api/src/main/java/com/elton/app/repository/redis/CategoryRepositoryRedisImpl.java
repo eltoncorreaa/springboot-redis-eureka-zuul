@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import com.elton.app.model.Category;
 import com.elton.app.support.RedisKeysHelper;
 import com.google.gson.Gson;
 
-@Repository
+@Component
 public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 
 	@Autowired
@@ -28,7 +28,7 @@ public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 	public Category findByDescriptionEqualsIgnoreCase(final String description) {
 		for (final String keys : redisTemplate.keys("categories:*")) {
 			final Category category= new Gson().fromJson(redisTemplate.opsForValue().get(keys), Category.class);
-			if(description.equalsIgnoreCase(category.getDescription())) {
+			if(category.getDescription().equalsIgnoreCase(description)) {
 				return category;
 			}
 		}

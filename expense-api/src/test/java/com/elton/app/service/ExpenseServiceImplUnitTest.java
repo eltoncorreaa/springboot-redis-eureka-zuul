@@ -12,12 +12,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.elton.app.converter.ExpenseConverter;
-import com.elton.app.dto.ExpenseDTO;
 import com.elton.app.exception.OptimisticLockException;
-import com.elton.app.model.Category;
 import com.elton.app.model.Expense;
-import com.elton.app.objectfactory.CategoryMother;
 import com.elton.app.objectfactory.ExpenseMother;
 import com.elton.app.repository.CategoryRepository;
 import com.elton.app.repository.ExpenseRepository;
@@ -42,66 +38,80 @@ public class ExpenseServiceImplUnitTest {
 	public final ExpectedException exception = ExpectedException.none();
 
 	@Test
-	public void insertWithExistingCategoryTest() {
-		final ExpenseDTO dto =ExpenseMother.getExpenseDTOPattern();
-		final Category category= CategoryMother.getCategoryModelWithIdPattern();
+	public void insertWithExistingCategoryInRedisTest() {
+		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
+		final Expense modelWithoutId = ExpenseMother.getExpenseModelWithoutId();
 
-		final Expense expenseModel= ExpenseConverter.fromDTO(dto);
-		expenseModel.setCategory(category);
+		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(modelWithoutId.getCategory());
+		Mockito.when(expenseRepository.save(modelWithoutId)).thenReturn(modelWithId);
 
-		Mockito.when(expenseRepository.save(expenseModel)).thenReturn(expenseModel);
-
-		final ExpenseDTO dtoReturn = expenseServiceImpl.insert(dto);
-		Assert.assertEquals(expenseModel, ExpenseConverter.fromDTO(dtoReturn));
-		Assert.assertEquals(expenseModel.getCategory().getDescription(), ExpenseConverter.fromDTO(dtoReturn).getCategory().getDescription());
+		final Expense result = expenseServiceImpl.insert(modelWithoutId);
+		Assert.assertEquals(result, modelWithId);
 	}
 
 	@Test
-	public void insertWithCategoryNonexistentTest() {
-		final ExpenseDTO dto =ExpenseMother.getExpenseDTOPattern();
-		final Category categoryWithId= CategoryMother.getCategoryModelWithIdPattern();
+	public void insertWithExistingCategoryInRelationalDatabaseTest() {
+		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
+		final Expense modelWithoutId = ExpenseMother.getExpenseModelWithoutId();
 
-		final Expense expenseModel= ExpenseConverter.fromDTO(dto);
-		expenseModel.setCategory(categoryWithId);
+		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(null);
+		Mockito.when(categoryRepository.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(modelWithoutId.getCategory());
+		Mockito.when(expenseRepository.save(modelWithoutId)).thenReturn(modelWithId);
 
-		Mockito.when(expenseRepository.save(expenseModel)).thenReturn(expenseModel);
-
-		final ExpenseDTO dtoReturn = expenseServiceImpl.insert(dto);
-		Assert.assertEquals(expenseModel, ExpenseConverter.fromDTO(dtoReturn));
-		Assert.assertEquals(expenseModel.getCategory().getDescription(), ExpenseConverter.fromDTO(dtoReturn).getCategory().getDescription());
+		final Expense result = expenseServiceImpl.insert(modelWithoutId);
+		Assert.assertEquals(result, modelWithId);
 	}
 
 	@Test
-	public void updateWithExistingCategoryTest() {
-		final ExpenseDTO dto =ExpenseMother.getExpenseDTOPattern();
-		final Category category= CategoryMother.getCategoryModelWithIdPattern();
+	public void insertWithCategoryNonExistentTest() {
+		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
+		final Expense modelWithoutId = ExpenseMother.getExpenseModelWithoutId();
+		final Expense modelWitCategoryWithoutId = ExpenseMother.getExpenseModelWithCategoryWithoutId();
 
-		final Expense expenseModel= ExpenseConverter.fromDTO(dto);
-		expenseModel.setCategory(category);
-		final Optional<Expense> optionalExpense = Optional.of(expenseModel);
+		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(null);
+		Mockito.when(categoryRepository.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(null);
 
-		Mockito.when(expenseRepository.save(expenseModel)).thenReturn(expenseModel);
-		Mockito.when(expenseRepository.findById(expenseModel.getId())).thenReturn(optionalExpense);
+		Mockito.when(categoryRepository.save(modelWitCategoryWithoutId.getCategory())).thenReturn(modelWithId.getCategory());
+		Mockito.when(categoryRepositoryRedis.insert(modelWithId.getCategory())).thenReturn(modelWithId.getCategory());
 
-		final ExpenseDTO dtoReturn = expenseServiceImpl.update(dto);
-		Assert.assertEquals(expenseModel, ExpenseConverter.fromDTO(dtoReturn));
-		Assert.assertEquals(expenseModel.getCategory().getDescription(), ExpenseConverter.fromDTO(dtoReturn).getCategory().getDescription());
+		Mockito.when(expenseRepository.save(modelWithoutId)).thenReturn(modelWithId);
+
+		final Expense result = expenseServiceImpl.insert(modelWithoutId);
+		Assert.assertEquals(result, modelWithId);
+	}
+
+	@Test
+	public void updateWithCategoryNonExistentTest() {
+		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
+		final Expense modelWitCategoryWithoutId = ExpenseMother.getExpenseModelWithCategoryWithoutId();
+		final Optional<Expense> optionalExpense = Optional.of(modelWithId);
+
+		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWitCategoryWithoutId.getCategory().getDescription())).thenReturn(null);
+		Mockito.when(categoryRepository.findByDescriptionEqualsIgnoreCase(modelWitCategoryWithoutId.getCategory().getDescription())).thenReturn(null);
+
+		Mockito.when(categoryRepository.save(modelWitCategoryWithoutId.getCategory())).thenReturn(modelWithId.getCategory());
+		Mockito.when(categoryRepositoryRedis.insert(modelWithId.getCategory())).thenReturn(modelWithId.getCategory());
+
+		Mockito.when(expenseRepository.save(modelWithId)).thenReturn(modelWithId);
+		Mockito.when(expenseRepository.findById(modelWithId.getId())).thenReturn(optionalExpense);
+
+		final Expense result = expenseServiceImpl.update(modelWithId);
+		Assert.assertEquals(result, modelWithId);
 	}
 
 	@Test
 	public void updateWithExistingCategoryAndOptimisticLockErrorTest() {
 		exception.expect(OptimisticLockException.class);
-		final ExpenseDTO dto =ExpenseMother.getExpenseDTOPattern();
+		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
+		final Expense modelUpdated = ExpenseMother.getExpenseModelWithId();
+		modelUpdated.setVersion(1);
+		final Optional<Expense> optionalExpense = Optional.of(modelUpdated);
 
-		final Category category= CategoryMother.getCategoryModelWithIdPattern();
+		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWithId.getCategory().getDescription())).thenReturn(null);
+		Mockito.when(categoryRepository.findByDescriptionEqualsIgnoreCase(modelWithId.getCategory().getDescription())).thenReturn(modelWithId.getCategory());
 
-		final Expense expenseModel= ExpenseConverter.fromDTO(dto);
-		expenseModel.setCategory(category);
-		final Optional<Expense> optionalExpense = Optional.of(expenseModel);
+		Mockito.when(expenseRepository.findById(modelWithId.getId())).thenReturn(optionalExpense);
 
-		dto.setVersion(1);
-		Mockito.when(expenseRepository.findById(expenseModel.getId())).thenReturn(optionalExpense);
-
-		expenseServiceImpl.update(dto);
+		expenseServiceImpl.update(modelWithId);
 	}
 }

@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -18,12 +19,13 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
 @Table(name = "EXPENSE")
+@SequenceGenerator(name = "SEQUENCE_EXPENSE", sequenceName = "SEQUENCE_EXPENSE")
 public class Expense implements Serializable {
 
 	private static final long serialVersionUID = -8507622473380945770L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQUENCE_EXPENSE")
 	@Column(name = "ID_EXPENSE", precision = 12, scale = 0)
 	private Long id;
 

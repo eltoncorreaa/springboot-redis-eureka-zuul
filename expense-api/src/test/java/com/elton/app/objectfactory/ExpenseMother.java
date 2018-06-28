@@ -7,22 +7,54 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.elton.app.dto.ExpenseDTO;
+import com.elton.app.model.Category;
 import com.elton.app.model.Expense;
 
 
 /**
- * Classe utilizada nas classes de teste com a finalidade de criacao das
- * entidades reutilizáveis Ver: http://martinfowler.com/bliki/ObjectMother.html
+ * Class used in test classes for the purpose of creating
+ * reusable entities. View in: http://martinfowler.com/bliki/ObjectMother.html
  */
 @Component
 public class ExpenseMother {
 
 	public static final String DESCRIPTION_DTO_TEST = "Description Category";
 
-	public static Expense getExpenseModelPattern() {
+	public static Expense getExpenseModelWithId() {
 		final Expense expense = new Expense();
 		expense.setId(1L);
-		expense.setCategory(CategoryMother.getCategoryModelWithIdPattern());
+		expense.setCategory(CategoryMother.getCategoryModelWithId());
+		expense.setExpenseDate(LocalDateTime.of(2018, 5, 1, 0, 0, 0));
+		expense.setUserCode(1L);
+		expense.setValue(20);
+		expense.setVersion(0);
+		return expense;
+	}
+
+	public static Expense getExpenseModelWithoutId() {
+		final Expense expense = new Expense();
+		expense.setCategory(CategoryMother.getCategoryModelWithId());
+		expense.setExpenseDate(LocalDateTime.of(2018, 5, 1, 0, 0, 0));
+		expense.setUserCode(1L);
+		expense.setValue(20);
+		expense.setVersion(0);
+		return expense;
+	}
+
+	public static Expense getExpenseModelWithCategoryWithoutId() {
+		final Expense expense = new Expense();
+		expense.setCategory(CategoryMother.getCategoryModelWithoutId());
+		expense.setExpenseDate(LocalDateTime.of(2018, 5, 1, 0, 0, 0));
+		expense.setUserCode(1L);
+		expense.setValue(20);
+		expense.setVersion(0);
+		return expense;
+	}
+
+	public static Expense getExpenseModelWithoutCategory() {
+		final Expense expense = new Expense();
+		expense.setId(1L);
+		expense.setCategory(new Category());
 		expense.setExpenseDate(LocalDateTime.of(2018, 5, 1, 0, 0, 0));
 		expense.setUserCode(1L);
 		expense.setValue(20);
@@ -43,7 +75,7 @@ public class ExpenseMother {
 
 	public static List<Expense> getListExpenseModelPattern() {
 		final List<Expense> list = new ArrayList<>();
-		list.add(getExpenseModelPattern());
+		list.add(getExpenseModelWithId());
 		return list;
 	}
 }
