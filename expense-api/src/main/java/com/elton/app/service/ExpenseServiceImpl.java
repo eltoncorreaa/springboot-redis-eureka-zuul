@@ -1,6 +1,7 @@
 package com.elton.app.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -88,7 +89,8 @@ public class ExpenseServiceImpl implements ExpenseService {
 	}
 
 	private void validateLockOptimistic(final Expense expense) {
-		if (!expenseRepository.findById(expense.getId()).get().getVersion().equals(expense.getVersion())) {
+		final Optional<Expense> result = expenseRepository.findById(expense.getId());
+		if (result.isPresent() && result.get().getVersion().compareTo(expense.getVersion()) != 0) {
 			throw new OptimisticLockException(OPTIMISTIC_LOCK);
 		}
 	}

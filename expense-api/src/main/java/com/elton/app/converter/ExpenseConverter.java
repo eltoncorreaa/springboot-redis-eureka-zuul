@@ -1,4 +1,4 @@
-package  com.elton.app.converter;
+package com.elton.app.converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,8 +10,8 @@ import com.elton.app.model.Expense;
 public class ExpenseConverter {
 
 	public static Expense fromDTO(final ExpenseDTO dto) {
-		final Expense expense= new Expense();
-		final Category category= new Category();
+		final Expense expense = new Expense();
+		final Category category = new Category();
 		expense.setCategory(category);
 		expense.setId(dto.getCode());
 		expense.getCategory().setDescription(dto.getDescription());
@@ -23,9 +23,9 @@ public class ExpenseConverter {
 	}
 
 	public static ExpenseDTO toDTO(final Expense model) {
-		final ExpenseDTO expenseDTO= new ExpenseDTO();
+		final ExpenseDTO expenseDTO = new ExpenseDTO();
 		expenseDTO.setCode(model.getId());
-		if(model.getCategory() != null) {
+		if (model.getCategory() != null) {
 			expenseDTO.setDescription(model.getCategory().getDescription());
 		}
 		expenseDTO.setUserCode(model.getUserCode());
@@ -35,9 +35,7 @@ public class ExpenseConverter {
 		return expenseDTO;
 	}
 
-	public static List<ExpenseDTO> toDTO(final List<Expense> listModel){
-		return listModel.stream().map(model -> {
-			return toDTO(model);
-		}).collect(Collectors.toList());
+	public static List<ExpenseDTO> toDTO(final List<Expense> listModel) {
+		return listModel.stream().map(model -> toDTO(model)).collect(Collectors.toList());
 	}
 }

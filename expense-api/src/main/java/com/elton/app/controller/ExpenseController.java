@@ -3,6 +3,8 @@ package  com.elton.app.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.elton.app.converter.ExpenseConverter;
 import com.elton.app.dto.ExpenseDTO;
+import com.elton.app.model.Expense;
 import com.elton.app.service.ExpenseService;
 
 @CrossOrigin
@@ -41,11 +44,15 @@ public class ExpenseController {
 
 	@GetMapping("/api/v1/expenses/{userCode}")
 	public ResponseEntity<?> findExpensesByUserCode(@PathVariable final Long userCode, final Pageable pageable){
-		return new ResponseEntity<>(expenseService.findExpensesByUserCode(userCode, pageable), HttpStatus.OK);
+		final Page<Expense> page = expenseService.findExpensesByUserCode(userCode, pageable);
+		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.toDTO(page.getContent()), page.getPageable(), page.getTotalElements());
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/api/v1/expenses")
 	public ResponseEntity<?> findExpensesByFilter(final ExpenseDTO dto, final Pageable pageable){
-		return new ResponseEntity<>(expenseService.findExpensesByFilter(dto.getDate(), dto.getUserCode(), pageable), HttpStatus.OK);
+		final Page<Expense> page = expenseService.findExpensesByFilter(dto.getDate(), dto.getUserCode(), pageable);
+		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.toDTO(page.getContent()), page.getPageable(), page.getTotalElements());
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
