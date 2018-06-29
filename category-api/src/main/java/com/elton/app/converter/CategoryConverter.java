@@ -8,13 +8,6 @@ import com.elton.app.model.Category;
 
 public class CategoryConverter {
 
-	public static Category fromDTO(final CategoryDTO dto) {
-		final Category model = new Category();
-		model.setId(dto.getCode());
-		model.setDescription(dto.getDescription());
-		return model;
-	}
-
 	public static CategoryDTO toDTO(final Category model) {
 		final CategoryDTO dto = new CategoryDTO();
 		dto.setCode(model.getId());

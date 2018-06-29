@@ -10,12 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "CATEGORY")
 @SequenceGenerator(name = "SEQUENCE_CATEGORY", sequenceName = "SEQUENCE_CATEGORY")
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = -448760385229721893L;
@@ -27,39 +31,4 @@ public class Category implements Serializable {
 
 	@Column(name = "DESCRIPTION", nullable = false, length = 200)
 	private String description;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(final Long id) {
-		this.id = id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(final String description) {
-		this.description = description;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(getId()).append(getDescription()).toHashCode();
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-
-		final Category rhs = (Category) obj;
-		return new EqualsBuilder().append(getId(), rhs.getId()).append(getDescription(), rhs.getDescription())
-				.isEquals();
-	}
 }

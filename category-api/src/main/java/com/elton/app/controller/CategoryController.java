@@ -16,10 +16,10 @@ import com.elton.app.service.CategoryService;
 public class CategoryController {
 
 	@Autowired
-	private CategoryService categoryService;
+	private CategoryService service;
 
 	@GetMapping("/api/v1/categories/{description}")
 	public ResponseEntity<?> findCategorySuggestionByDescription(@PathVariable final String description){
-		return new ResponseEntity<>(CategoryConverter.toDTO(categoryService.findCategorySuggestionByDescription(description)), HttpStatus.OK);
+		return new ResponseEntity<>(CategoryConverter.toDTO(service.findCategorySuggestionByDescription(description)), HttpStatus.OK);
 	}
 }

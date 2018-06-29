@@ -30,7 +30,12 @@ public class ExpenseServiceImpl implements ExpenseService {
 	@Autowired
 	private CategoryRepositoryRedis categoryRepositoryRedis;
 
-	private static final String OPTIMISTIC_lOCK = "The Expense was update by another transaction.";
+	private static final String OPTIMISTIC_LOCK = "The Expense was update by another transaction.";
+	private static final int SECOND_5 = 5;
+	private static final int SECOND_59 = 59;
+	private static final int MINUTES_59 = 59;
+	private static final int HOURS_23 = 23;
+
 
 	@Transactional(readOnly = false)
 	@Override
@@ -84,12 +89,12 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 	private void validateLockOptimistic(final Expense expense) {
 		if (!expenseRepository.findById(expense.getId()).get().getVersion().equals(expense.getVersion())) {
-			throw new OptimisticLockException(OPTIMISTIC_lOCK);
+			throw new OptimisticLockException(OPTIMISTIC_LOCK);
 		}
 	}
 
 	public static LocalDateTime getLocalDateTimeMinus5Seconds() {
-		return LocalDateTime.now().minusSeconds(5);
+		return LocalDateTime.now().minusSeconds(SECOND_5);
 	}
 
 	public static LocalDateTime getLocalDateTimeStartTime(final LocalDateTime expenseDate) {
@@ -97,6 +102,6 @@ public class ExpenseServiceImpl implements ExpenseService {
 	}
 
 	public static LocalDateTime getLocalDateEndTime(final LocalDateTime expenseDate) {
-		return LocalDateTime.of(expenseDate.getYear(), expenseDate.getMonth(), expenseDate.getDayOfMonth(), 23, 59, 59);
+		return LocalDateTime.of(expenseDate.getYear(), expenseDate.getMonth(), expenseDate.getDayOfMonth(), HOURS_23, MINUTES_59, SECOND_59);
 	}
 }

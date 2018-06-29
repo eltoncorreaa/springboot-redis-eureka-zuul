@@ -14,12 +14,16 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "EXPENSE")
 @SequenceGenerator(name = "SEQUENCE_EXPENSE", sequenceName = "SEQUENCE_EXPENSE")
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Expense implements Serializable {
 
 	private static final long serialVersionUID = -8507622473380945770L;
@@ -45,73 +49,4 @@ public class Expense implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "ID_CATEGORY", referencedColumnName = "ID_CATEGORY", nullable = true)
 	private Category category;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(final Long id) {
-		this.id = id;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(final double value) {
-		this.value = value;
-	}
-
-	public LocalDateTime getExpenseDate() {
-		return expenseDate;
-	}
-
-	public void setExpenseDate(final LocalDateTime expenseDate) {
-		this.expenseDate = expenseDate;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(final Category category) {
-		this.category = category;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(final Integer version) {
-		this.version = version;
-	}
-
-	public Long getUserCode() {
-		return userCode;
-	}
-
-	public void setUserCode(final Long userCode) {
-		this.userCode = userCode;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(getId()).append(getValue()).append(getUserCode()).append(getExpenseDate())
-				.append(getVersion()).toHashCode();
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-
-		final Expense rhs = (Expense) obj;
-		return new EqualsBuilder().append(getId(), rhs.getId()).append(getValue(), rhs.getValue())
-				.append(getUserCode(), rhs.getUserCode()).append(getExpenseDate(), rhs.getExpenseDate())
-				.append(getVersion(), rhs.getVersion()).isEquals();
-	}
 }
