@@ -6,12 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elton.app.converter.CategoryConverter;
 import com.elton.app.service.CategoryService;
 
-@RequestMapping("/api/v1/categories")
 @CrossOrigin
 @RestController
 public class CategoryController {
@@ -19,8 +18,8 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
-	@GetMapping("/{description}")
+	@GetMapping("/api/v1/categories/{description}")
 	public ResponseEntity<?> findCategorySuggestionByDescription(@PathVariable final String description){
-		return new ResponseEntity<>(categoryService.findCategorySuggestionByDescription(description), HttpStatus.OK);
+		return new ResponseEntity<>(CategoryConverter.toDTO(categoryService.findCategorySuggestionByDescription(description)), HttpStatus.OK);
 	}
 }

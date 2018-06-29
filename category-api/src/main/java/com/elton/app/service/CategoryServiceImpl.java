@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.elton.app.converter.CategoryConverter;
-import com.elton.app.dto.CategoryDTO;
 import com.elton.app.exception.CategoryNotFoundException;
 import com.elton.app.model.Category;
 import com.elton.app.repository.CategoryRepository;
@@ -24,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService{
 	private CategoryRepositoryRedis categoryRepositoryRedis;
 
 	@Override
-	public List<CategoryDTO> findCategorySuggestionByDescription(final String description) {
+	public List<Category> findCategorySuggestionByDescription(final String description) {
 		List<Category> listCategories = categoryRepositoryRedis.findCategorySuggestionByDescription(description);
 		if(listCategories.isEmpty()) {
 			listCategories = categoryRepository.findByDescriptionContainingIgnoreCase(description);
@@ -32,6 +30,6 @@ public class CategoryServiceImpl implements CategoryService{
 		if(listCategories.isEmpty()) {
 			throw new CategoryNotFoundException("Categories not found with this description: "+ description);
 		}
-		return CategoryConverter.toDTO(listCategories);
+		return listCategories;
 	}
 }

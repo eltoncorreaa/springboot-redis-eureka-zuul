@@ -1,5 +1,6 @@
 package com.elton.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -12,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.elton.app.converter.CategoryConverter;
-import com.elton.app.dto.CategoryDTO;
 import com.elton.app.exception.CategoryNotFoundException;
 import com.elton.app.model.Category;
 import com.elton.app.objectfactory.CategoryMother;
@@ -40,18 +39,22 @@ public class CategoryServiceImplUnitTest {
 	@Test
 	public void findCategorySuggestionByDescriptionTest() {
 		final List<Category> listCategory= CategoryMother.getListCategoryModelPattern();
-		Mockito.when(categoryRepositoryRedis.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST)).thenReturn(listCategory);
-		final List<CategoryDTO> listReturn = categoryServiceImpl.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST);
 
-		Assert.assertEquals(listReturn.size(), 1);
-		Assert.assertEquals(listCategory.get(0), CategoryConverter.fromDTO(listReturn.get(0)));
+		Mockito.when(categoryRepositoryRedis.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST)).thenReturn(new ArrayList<>());
+		Mockito.when(categoryRepository.findByDescriptionContainingIgnoreCase(DESCRIPTION_MODEL_TEST)).thenReturn(listCategory);
+
+		final List<Category> result = categoryServiceImpl.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST);
+
+		Assert.assertEquals(result.size(), 1);
+		Assert.assertEquals(listCategory.get(0), result.get(0));
 	}
 
 	@Test
 	public void findCategorySuggestionByDescriptionErrorTest() {
 		exception.expect(CategoryNotFoundException.class);
-		final CategoryNotFoundException exception= new CategoryNotFoundException("Categories not found with this description: "+ DESCRIPTION_MODEL_TEST);
-		Mockito.when(categoryRepositoryRedis.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST)).thenThrow(exception);
+		Mockito.when(categoryRepositoryRedis.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST)).thenReturn(new ArrayList<>());
+		Mockito.when(categoryRepository.findByDescriptionContainingIgnoreCase(DESCRIPTION_MODEL_TEST)).thenReturn(new ArrayList<>());
+
 		categoryServiceImpl.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST);
 	}
 }
