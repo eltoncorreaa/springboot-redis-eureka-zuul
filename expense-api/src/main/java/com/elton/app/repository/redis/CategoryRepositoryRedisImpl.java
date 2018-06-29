@@ -5,13 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import com.elton.app.model.Category;
 import com.elton.app.support.RedisKeysHelper;
 import com.google.gson.Gson;
 
-@Component
 public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 
 	@Autowired
