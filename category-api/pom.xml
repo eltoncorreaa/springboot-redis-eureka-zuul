@@ -21,6 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<sonar.host.url>http://localhost:9000/</sonar.host.url>
 	</properties>
 
 	<dependencies>
@@ -54,12 +55,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<type>jar</type>
 		</dependency>
 		
 		<dependency>
@@ -124,13 +119,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<profiles>
-		<profile>
-			<id>sonar-coverage</id>
-			<properties>
-				<sonar.host.url>http://localhost:9000/</sonar.host.url>
-			</properties>			
-		</profile>
-	</profiles>
 </project>

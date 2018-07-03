@@ -1,6 +1,7 @@
 package com.elton.app.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
@@ -41,10 +42,30 @@ public class ExpenseControllerUnitTest {
 		final Expense model = ExpenseConverter.fromDTO(dto);
 		Mockito.when(expenseService.insert(model)).thenReturn(model);
 
-
-		mvc.perform(post("/api/v1/expenses")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(dto)))
-		.andExpect(status().is2xxSuccessful());
+		mvc.perform(post("/api/v1/expenses").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().is2xxSuccessful());
 	}
+
+	@Test
+	public void updateTest() throws Exception {
+		final ExpenseDTO dto = ExpenseMother.getExpenseDTOPattern();
+		dto.setDate(null);
+		final Expense model = ExpenseConverter.fromDTO(dto);
+		Mockito.when(expenseService.update(model)).thenReturn(model);
+
+		mvc.perform(put("/api/v1/expenses").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().is2xxSuccessful());
+	}
+
+	/*@Test
+	public void findExpensesByUserCodeTest() throws Exception {
+		//final Page<Expense> param = new PageImpl<>(new ArrayList<Expense>, 1, 10L);
+
+		//final RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/expenses/1").accept(MediaType.APPLICATION_JSON);
+		//		final MvcResult result = mvc.perform(get("/api/v1/expenses/1").contentType(MediaType.APPLICATION_JSON)).andReturn();
+		//final MvcResult result = mvc.perform(requestBuilder).andReturn();
+
+		mvc.perform(get("/api/v1/expenses").pathInfo("1")).andExpect(status().is2xxSuccessful());
+		//System.out.println(result);
+	}*/
 }
