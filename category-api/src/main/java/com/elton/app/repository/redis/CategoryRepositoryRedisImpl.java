@@ -3,7 +3,6 @@ package  com.elton.app.repository.redis;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +12,6 @@ import com.google.gson.Gson;
 @Repository
 public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 
-	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
 
 	@Override

@@ -1,12 +1,12 @@
 package com.elton.app.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,9 +28,6 @@ public class ExpenseControllerUnitTest {
 
 	@Autowired
 	private MockMvc mvc;
-
-	@InjectMocks
-	private ExpenseController expenseController;
 
 	@MockBean
 	private ExpenseService expenseService;
@@ -57,7 +54,7 @@ public class ExpenseControllerUnitTest {
 				.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().is2xxSuccessful());
 	}
 
-	/*@Test
+	@Test
 	public void findExpensesByUserCodeTest() throws Exception {
 		//final Page<Expense> param = new PageImpl<>(new ArrayList<Expense>, 1, 10L);
 
@@ -65,7 +62,8 @@ public class ExpenseControllerUnitTest {
 		//		final MvcResult result = mvc.perform(get("/api/v1/expenses/1").contentType(MediaType.APPLICATION_JSON)).andReturn();
 		//final MvcResult result = mvc.perform(requestBuilder).andReturn();
 
-		mvc.perform(get("/api/v1/expenses").pathInfo("1")).andExpect(status().is2xxSuccessful());
+		mvc.perform(get("/api/v1/expenses/1")
+				.content("size=5"));
 		//System.out.println(result);
-	}*/
+	}
 }
