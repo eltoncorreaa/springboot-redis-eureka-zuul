@@ -1,69 +1,80 @@
 package com.elton.app.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.http.ResponseEntity;
 
 import com.elton.app.converter.ExpenseConverter;
 import com.elton.app.dto.ExpenseDTO;
 import com.elton.app.model.Expense;
 import com.elton.app.objectfactory.ExpenseMother;
 import com.elton.app.service.ExpenseService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = ExpenseController.class, secure = false)
+@RunWith(MockitoJUnitRunner.class)
 public class ExpenseControllerUnitTest {
 
-	@Autowired
-	private MockMvc mvc;
+	@InjectMocks
+	private ExpenseController expenseController;
 
-	@MockBean
+	@Mock
 	private ExpenseService expenseService;
 
-	@Test
-	public void insertTest() throws Exception {
-		final ExpenseDTO dto = ExpenseMother.getExpenseDTOPattern();
-		dto.setDate(null);
-		final Expense model = ExpenseConverter.fromDTO(dto);
-		Mockito.when(expenseService.insert(model)).thenReturn(model);
+	private static final int STATUS_CODE_SUCESS = 200;
 
-		mvc.perform(post("/api/v1/expenses").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().is2xxSuccessful());
+	@Test
+	public void insertTest() {
+		final Expense domain= ExpenseConverter.fromDTO(ExpenseMother.getExpenseDTOPattern());
+		final ExpenseDTO dto = ExpenseMother.getExpenseDTOPattern();
+
+		Mockito.when(expenseService.insert(domain)).thenReturn(domain);
+
+		final ResponseEntity<ExpenseDTO> result = expenseController.insert(dto);
+		Assert.assertEquals(result.getBody(), dto);
+		Assert.assertEquals(result.getStatusCodeValue(), STATUS_CODE_SUCESS);
 	}
 
 	@Test
-	public void updateTest() throws Exception {
+	public void updateTest() {
+		final Expense domain= ExpenseConverter.fromDTO(ExpenseMother.getExpenseDTOPattern());
 		final ExpenseDTO dto = ExpenseMother.getExpenseDTOPattern();
-		dto.setDate(null);
-		final Expense model = ExpenseConverter.fromDTO(dto);
-		Mockito.when(expenseService.update(model)).thenReturn(model);
 
-		mvc.perform(put("/api/v1/expenses").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().is2xxSuccessful());
+		Mockito.when(expenseService.update(domain)).thenReturn(domain);
+
+		final ResponseEntity<ExpenseDTO> result = expenseController.update(dto);
+		Assert.assertEquals(result.getBody(), dto);
+		Assert.assertEquals(result.getStatusCodeValue(), STATUS_CODE_SUCESS);
 	}
 
 	@Test
-	public void findExpensesByUserCodeTest() throws Exception {
-		//final Page<Expense> param = new PageImpl<>(new ArrayList<Expense>, 1, 10L);
+	public void findExpensesByUserCodeTest() {
+		final Page<Expense> page= new PageImpl<>(ExpenseMother.getListExpenseModelPattern());
+		Mockito.when(expenseService.findExpensesByUserCode(1L, null)).thenReturn(page);
 
-		//final RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/expenses/1").accept(MediaType.APPLICATION_JSON);
-		//		final MvcResult result = mvc.perform(get("/api/v1/expenses/1").contentType(MediaType.APPLICATION_JSON)).andReturn();
-		//final MvcResult result = mvc.perform(requestBuilder).andReturn();
+		final Page<ExpenseDTO> pageDTO= new PageImpl<>(ExpenseConverter.toDTO(ExpenseMother.getListExpenseModelPattern()));
+		final ResponseEntity<Page<ExpenseDTO>> result = expenseController.findExpensesByUserCode(1L, null);
 
-		mvc.perform(get("/api/v1/expenses/1")
-				.content("size=5"));
-		//System.out.println(result);
+		Assert.assertEquals(result.getBody().getContent(), pageDTO.getContent());
+		Assert.assertEquals(result.getStatusCodeValue(), STATUS_CODE_SUCESS);
+	}
+
+	@Test
+	public void findExpensesByFilterTest() {
+		final ExpenseDTO dto = ExpenseMother.getExpenseDTOPattern();
+
+		final Page<Expense> page= new PageImpl<>(ExpenseMother.getListExpenseModelPattern());
+		Mockito.when(expenseService.findExpensesByFilter(dto.getDate(), dto.getUserCode(), null)).thenReturn(page);
+
+		final Page<ExpenseDTO> pageDTO= new PageImpl<>(ExpenseConverter.toDTO(ExpenseMother.getListExpenseModelPattern()));
+		final ResponseEntity<Page<ExpenseDTO>> result = expenseController.findExpensesByFilter(dto, null);
+
+		Assert.assertEquals(result.getBody().getContent(), pageDTO.getContent());
+		Assert.assertEquals(result.getStatusCodeValue(), STATUS_CODE_SUCESS);
 	}
 }
