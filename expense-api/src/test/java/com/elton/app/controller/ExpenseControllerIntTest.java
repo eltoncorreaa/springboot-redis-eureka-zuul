@@ -1,4 +1,4 @@
-package com.elton.app.controller;
+/*package com.elton.app.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -52,4 +52,4 @@ public class ExpenseControllerIntTest {
 		mvc.perform(put("/api/v1/expenses").contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().is2xxSuccessful());
 	}
-}
+}*/

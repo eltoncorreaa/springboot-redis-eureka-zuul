@@ -13,7 +13,7 @@ import com.elton.app.model.Expense;
 import com.elton.app.objectfactory.ExpenseMother;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExpenseConverterUnitTest {
+public class ExpenseConverterUnitTest { 
 
 	@Test
 	public void fromDTOTest() {
@@ -31,11 +31,13 @@ public class ExpenseConverterUnitTest {
 	}
 
 	@Test
-	public void converterParaListFatorDTOTest() {
+	public void toListDTOTest() {
+		Expense expense= ExpenseMother.getExpenseModelWithId();
+		expense.setCategory(null);
 		final List<Expense> lista = new ArrayList<>();
 		lista.add(ExpenseMother.getExpenseModelWithId());
 		lista.add(ExpenseMother.getExpenseModelWithId());
-		lista.add(ExpenseMother.getExpenseModelWithId());
+		lista.add(expense);
 
 		final List<ExpenseDTO> listDTO = ExpenseConverter.toDTO(lista);
 		Assert.assertEquals(lista.size(), listDTO.size());

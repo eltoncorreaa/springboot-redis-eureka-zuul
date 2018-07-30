@@ -76,16 +76,22 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 	@Transactional(readOnly = false)
 	public Category categorizeExpenses(final String description) {
-		Category category = categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(description);
-		if (category == null) {
-			category = categoryRepository.findByDescriptionEqualsIgnoreCase(description);
-		}
+		Category category = findCategoryInDatabases(description);
 		if (description != null && category == null) {
 			category = new Category();
 			category.setDescription(description);
 			return categoryRepositoryRedis.insert(categoryRepository.save(category));
 		}
 		return category;
+	}
+
+	private Category findCategoryInDatabases(final String description) {
+		Optional<Category> category = categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(description);
+		if (category.isPresent()) {
+			return category.get();
+		}else {
+			return categoryRepository.findByDescriptionEqualsIgnoreCase(description);
+		}
 	}
 
 	private void validateLockOptimistic(final Expense expense) {

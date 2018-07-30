@@ -1,6 +1,6 @@
 package  com.elton.app.repository.redis;
 
-import java.util.List;
+import java.util.Optional;
 
 import com.elton.app.model.Category;
 
@@ -8,7 +8,5 @@ public interface CategoryRepositoryRedis {
 
 	Category insert(Category category);
 
-	List<Category> findCategorySuggestionByDescription(String description);
-
-	Category findByDescriptionEqualsIgnoreCase(String description);
+	Optional<Category> findByDescriptionEqualsIgnoreCase(String description);
 }
