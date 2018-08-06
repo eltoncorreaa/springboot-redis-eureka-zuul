@@ -26,6 +26,7 @@ public class ExpenseController {
 	@Autowired
 	private ExpenseService expenseService;
 
+	//teste
 	@PostMapping("/api/v1/expenses")
 	public ResponseEntity<ExpenseDTO> insert(@RequestBody final ExpenseDTO dto){
 		final ExpenseDTO result= ExpenseConverter.toDTO(expenseService.insert(ExpenseConverter.fromDTO(dto)));
