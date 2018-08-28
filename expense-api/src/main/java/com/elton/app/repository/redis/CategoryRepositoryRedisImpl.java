@@ -27,9 +27,17 @@ public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 
 	@Override
 	public Optional<Category> findByDescriptionEqualsIgnoreCase(final String description) {
-		List<Category> listCategory= new ArrayList<>();	
-		List<String> listJsonCategory= redisTemplate.opsForValue().multiGet(redisTemplate.keys("categories:*"));
+		final List<Category> listCategory= new ArrayList<>();
+		final List<String> listJsonCategory= redisTemplate.opsForValue().multiGet(redisTemplate.keys("categories:*"));
 		listJsonCategory.forEach(json -> listCategory.add(new Gson().fromJson(json, Category.class)));
-		return listCategory.stream().filter(x -> x.getDescription().equalsIgnoreCase(description)).findFirst();		
+		return listCategory.stream().filter(x -> x.getDescription().equalsIgnoreCase(description)).findFirst();
+	}
+
+	public static Object fromJson(final String json, final Class<Object> obj){
+		return new Gson().fromJson(json, obj);
+	}
+
+	public static String toJson(final Object obj){
+		return new Gson().toJson(obj);
 	}
 }

@@ -17,9 +17,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "CATEGORY")
 @SequenceGenerator(name = "SEQUENCE_CATEGORY", sequenceName = "SEQUENCE_CATEGORY")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Getter @Setter @EqualsAndHashCode
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = -448760385229721893L;
