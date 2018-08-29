@@ -1,8 +1,8 @@
 package  com.elton.app.repository.redis;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,9 +27,8 @@ public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 
 	@Override
 	public Optional<Category> findByDescriptionEqualsIgnoreCase(final String description) {
-		final List<Category> listCategory= new ArrayList<>();
 		final List<String> listJsonCategory= redisTemplate.opsForValue().multiGet(redisTemplate.keys("categories:*"));
-		listJsonCategory.forEach(json -> listCategory.add(new Gson().fromJson(json, Category.class)));
+		final List<Category> listCategory= listJsonCategory.stream().map(json -> new Gson().fromJson(json, Category.class)).collect(Collectors.toList());
 		return listCategory.stream().filter(x -> x.getDescription().equalsIgnoreCase(description)).findFirst();
 	}
 

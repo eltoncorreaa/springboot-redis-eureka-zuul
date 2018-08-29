@@ -1,7 +1,7 @@
 package  com.elton.app.repository.redis;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,20 +16,8 @@ public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 
 	@Override
 	public List<Category> findCategorySuggestionByDescription(final String description) {
-		final List<Category> listCategory= new ArrayList<>();
-		for (final String keys : redisTemplate.keys("categories:*")) {
-			listCategory.add(new Gson().fromJson(redisTemplate.opsForValue().get(keys), Category.class));
-		}
-		return findAllSugestionsCategories(listCategory, description);
-	}
-
-	public List<Category> findAllSugestionsCategories(final List<Category> listCategories, final String description) {
-		final List<Category> listOfSuggested = new ArrayList<>();
-		for (final Category category : listCategories) {
-			if(category.getDescription().contains(description)) {
-				listOfSuggested.add(category);
-			}
-		}
-		return listOfSuggested;
+		final List<String> listJson= redisTemplate.opsForValue().multiGet(redisTemplate.keys("categories:*"));
+		final List<Category> listCategory= listJson.stream().map(json -> new Gson().fromJson(json, Category.class)).collect(Collectors.toList());
+		return listCategory.stream().filter(obj -> obj.getDescription().contains(description)).collect(Collectors.toList());
 	}
 }
