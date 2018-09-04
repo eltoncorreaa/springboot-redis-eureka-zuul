@@ -36,6 +36,6 @@ public class ExpenseConverter {
 	}
 
 	public static List<ExpenseDTO> toDTO(final List<Expense> listModel) {
-		return listModel.stream().map(model -> toDTO(model)).collect(Collectors.toList());
+		return listModel.stream().map(ExpenseConverter::toDTO).collect(Collectors.toList());
 	}
 }
