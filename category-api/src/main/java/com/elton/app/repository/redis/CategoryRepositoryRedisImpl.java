@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.elton.app.model.Category;
-import com.google.gson.Gson;
+import com.elton.app.support.RedisKeysHelper;
 
 @Repository
 public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
@@ -17,7 +17,7 @@ public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 	@Override
 	public List<Category> findCategorySuggestionByDescription(final String description) {
 		final List<String> listJson= redisTemplate.opsForValue().multiGet(redisTemplate.keys("categories:*"));
-		final List<Category> listCategory= listJson.stream().map(json -> new Gson().fromJson(json, Category.class)).collect(Collectors.toList());
+		final List<Category> listCategory= listJson.stream().map(json -> RedisKeysHelper.serializableToObject(json, Category.class)).collect(Collectors.toList());
 		return listCategory.stream().filter(obj -> obj.getDescription().contains(description)).collect(Collectors.toList());
 	}
 }
