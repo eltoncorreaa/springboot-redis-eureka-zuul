@@ -22,6 +22,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<sonar.host.url>http://localhost:9000/</sonar.host.url>
+		<sonar.exclusions>**/elton/app/*.java</sonar.exclusions>
 	</properties>
 
 	<dependencies>
