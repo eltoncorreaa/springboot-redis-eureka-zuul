@@ -31,12 +31,4 @@ public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 		final List<Category> listCategory= listJsonCategory.stream().map(json -> new Gson().fromJson(json, Category.class)).collect(Collectors.toList());
 		return listCategory.stream().filter(x -> x.getDescription().equalsIgnoreCase(description)).findFirst();
 	}
-
-	public static Object fromJson(final String json, final Class<Object> obj){
-		return new Gson().fromJson(json, obj);
-	}
-
-	public static String toJson(final Object obj){
-		return new Gson().toJson(obj);
-	}
 }
