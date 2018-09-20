@@ -86,12 +86,8 @@ public class ExpenseServiceImpl implements ExpenseService {
 	}
 
 	private Category findCategoryInDatabases(final String description) {
-		Optional<Category> category = categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(description);
-		if (category.isPresent()) {
-			return category.get();
-		}else {
-			return categoryRepository.findByDescriptionEqualsIgnoreCase(description);
-		}
+		final Optional<Category> category = categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(description);
+		return category.isPresent() ? category.get() : categoryRepository.findByDescriptionEqualsIgnoreCase(description);
 	}
 
 	private void validateLockOptimistic(final Expense expense) {
