@@ -13,8 +13,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
+import com.elton.app.domain.Category;
 import com.elton.app.exception.CategoryNotFoundException;
-import com.elton.app.model.Category;
 import com.elton.app.objectfactory.CategoryMother;
 import com.elton.app.service.CategoryService;
 

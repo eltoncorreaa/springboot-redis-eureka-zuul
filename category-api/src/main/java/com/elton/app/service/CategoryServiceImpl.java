@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.elton.app.exception.CategoryNotFoundException;
-import com.elton.app.model.Category;
+import com.elton.app.domain.Category;
 import com.elton.app.repository.CategoryRepository;
 import com.elton.app.repository.redis.CategoryRepositoryRedis;
 
@@ -23,13 +22,6 @@ public class CategoryServiceImpl implements CategoryService{
 
 	@Override
 	public List<Category> findCategorySuggestionByDescription(final String description) {
-		List<Category> listCategories = categoryRepositoryRedis.findCategorySuggestionByDescription(description);
-		if(listCategories.isEmpty()) {
-			listCategories = categoryRepository.findByDescriptionContainingIgnoreCase(description);
-		}
-		if(listCategories.isEmpty()) {
-			throw new CategoryNotFoundException("Categories not found with this description: "+ description);
-		}
-		return listCategories;
+		return new Category(categoryRepository, categoryRepositoryRedis).findCategorySuggestionByDescription(description);
 	}
 }

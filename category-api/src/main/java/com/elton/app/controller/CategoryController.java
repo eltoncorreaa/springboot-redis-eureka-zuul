@@ -23,7 +23,7 @@ public class CategoryController {
 
 	@GetMapping("/api/v1/categories/{description}")
 	public ResponseEntity<List<CategoryDTO>> findCategorySuggestionByDescription(@PathVariable final String description){
-		final List<CategoryDTO> result = CategoryConverter.toDTO(service.findCategorySuggestionByDescription(description));
+		final List<CategoryDTO> result = CategoryConverter.fromDomain(service.findCategorySuggestionByDescription(description));
 		return new ResponseEntity<List<CategoryDTO>>(result, HttpStatus.OK);
 	}
 }

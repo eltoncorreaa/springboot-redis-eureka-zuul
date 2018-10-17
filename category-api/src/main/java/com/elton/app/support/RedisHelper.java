@@ -11,7 +11,7 @@ import org.springframework.util.Base64Utils;
 
 import com.elton.app.exception.ManagedRedisException;
 
-public class RedisKeysHelper {
+public class RedisHelper {
 
 	public static String deserializableToString(final Serializable object) {
 		try {
