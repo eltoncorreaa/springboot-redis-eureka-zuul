@@ -3,13 +3,13 @@ package com.elton.app.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.elton.app.domain.Category;
+import com.elton.app.domain.Expense;
 import com.elton.app.dto.ExpenseDTO;
-import com.elton.app.model.Category;
-import com.elton.app.model.Expense;
 
 public class ExpenseConverter {
 
-	public static Expense fromDTO(final ExpenseDTO dto) {
+	public static Expense toDomain(final ExpenseDTO dto) {
 		final Expense expense = new Expense();
 		final Category category = new Category();
 		expense.setCategory(category);
@@ -22,7 +22,7 @@ public class ExpenseConverter {
 		return expense;
 	}
 
-	public static ExpenseDTO toDTO(final Expense model) {
+	public static ExpenseDTO fromDomain(final Expense model) {
 		final ExpenseDTO expenseDTO = new ExpenseDTO();
 		expenseDTO.setCode(model.getId());
 		if (model.getCategory() != null) {
@@ -35,7 +35,7 @@ public class ExpenseConverter {
 		return expenseDTO;
 	}
 
-	public static List<ExpenseDTO> toDTO(final List<Expense> listModel) {
-		return listModel.stream().map(ExpenseConverter::toDTO).collect(Collectors.toList());
+	public static List<ExpenseDTO> fromDomain(final List<Expense> listModel) {
+		return listModel.stream().map(ExpenseConverter::fromDomain).collect(Collectors.toList());
 	}
 }

@@ -12,9 +12,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.elton.app.domain.Category;
+import com.elton.app.domain.Expense;
 import com.elton.app.exception.OptimisticLockException;
-import com.elton.app.model.Category;
-import com.elton.app.model.Expense;
 import com.elton.app.objectfactory.CategoryMother;
 import com.elton.app.objectfactory.ExpenseMother;
 import com.elton.app.repository.CategoryRepository;

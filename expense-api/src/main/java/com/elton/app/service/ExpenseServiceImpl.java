@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.elton.app.domain.Category;
+import com.elton.app.domain.Expense;
 import com.elton.app.exception.ExpenseNotFoundException;
 import com.elton.app.exception.OptimisticLockException;
-import com.elton.app.model.Category;
-import com.elton.app.model.Expense;
 import com.elton.app.repository.CategoryRepository;
 import com.elton.app.repository.ExpenseRepository;
 import com.elton.app.repository.redis.CategoryRepositoryRedis;

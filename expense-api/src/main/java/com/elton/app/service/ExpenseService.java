@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.elton.app.model.Expense;
+import com.elton.app.domain.Expense;
 
 public interface ExpenseService {
 

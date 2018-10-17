@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.elton.app.domain.Category;
+import com.elton.app.domain.Expense;
 import com.elton.app.dto.ExpenseDTO;
-import com.elton.app.model.Category;
-import com.elton.app.model.Expense;
 
 
 /**

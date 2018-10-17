@@ -12,7 +12,7 @@ import org.springframework.util.Base64Utils;
 import com.elton.app.exception.ManagedRedisException;
 
 
-public final class RedisKeysHelper {
+public final class RedisHelper {
 
 	private static final String CATEGORIES_KEY_PARTNER = "categories:%s";
 

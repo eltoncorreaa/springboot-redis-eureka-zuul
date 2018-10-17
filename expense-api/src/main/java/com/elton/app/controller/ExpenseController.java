@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elton.app.converter.ExpenseConverter;
+import com.elton.app.domain.Expense;
 import com.elton.app.dto.ExpenseDTO;
-import com.elton.app.model.Expense;
 import com.elton.app.service.ExpenseService;
 
 @CrossOrigin
@@ -28,27 +28,27 @@ public class ExpenseController {
 
 	@PostMapping("/api/v1/expenses")
 	public ResponseEntity<ExpenseDTO> insert(@RequestBody final ExpenseDTO dto){
-		final ExpenseDTO result= ExpenseConverter.toDTO(expenseService.insert(ExpenseConverter.fromDTO(dto)));
+		final ExpenseDTO result= ExpenseConverter.fromDomain(expenseService.insert(ExpenseConverter.toDomain(dto)));
 		return new ResponseEntity<ExpenseDTO>(result, HttpStatus.OK);
 	}
 
 	@PutMapping("/api/v1/expenses")
 	public ResponseEntity<ExpenseDTO> update(@RequestBody final ExpenseDTO dto){
-		final ExpenseDTO result = ExpenseConverter.toDTO(expenseService.update(ExpenseConverter.fromDTO(dto)));
+		final ExpenseDTO result = ExpenseConverter.fromDomain(expenseService.update(ExpenseConverter.toDomain(dto)));
 		return new ResponseEntity<ExpenseDTO>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/api/v1/expenses/{userCode}")
 	public ResponseEntity<Page<ExpenseDTO>> findExpensesByUserCode(@PathVariable final Long userCode, final Pageable pageable){
 		final Page<Expense> page = expenseService.findExpensesByUserCode(userCode, pageable);
-		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.toDTO(page.getContent()), page.getPageable(), page.getTotalElements());
+		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.fromDomain(page.getContent()), page.getPageable(), page.getTotalElements());
 		return new ResponseEntity<Page<ExpenseDTO>>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/api/v1/expenses")
 	public ResponseEntity<Page<ExpenseDTO>> findExpensesByFilter(final ExpenseDTO dto, final Pageable pageable){
 		final Page<Expense> page = expenseService.findExpensesByFilter(dto.getDate(), dto.getUserCode(), pageable);
-		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.toDTO(page.getContent()), page.getPageable(), page.getTotalElements());
+		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.fromDomain(page.getContent()), page.getPageable(), page.getTotalElements());
 		return new ResponseEntity<Page<ExpenseDTO>>(result, HttpStatus.OK);
 	}
 }

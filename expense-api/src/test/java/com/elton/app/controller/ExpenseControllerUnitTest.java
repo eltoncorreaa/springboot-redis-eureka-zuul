@@ -12,8 +12,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 
 import com.elton.app.converter.ExpenseConverter;
+import com.elton.app.domain.Expense;
 import com.elton.app.dto.ExpenseDTO;
-import com.elton.app.model.Expense;
 import com.elton.app.objectfactory.ExpenseMother;
 import com.elton.app.service.ExpenseService;
 
@@ -30,7 +30,7 @@ public class ExpenseControllerUnitTest {
 
 	@Test
 	public void insertTest() {
-		final Expense domain= ExpenseConverter.fromDTO(ExpenseMother.getExpenseDTOPattern());
+		final Expense domain= ExpenseConverter.toDomain(ExpenseMother.getExpenseDTOPattern());
 		final ExpenseDTO dto = ExpenseMother.getExpenseDTOPattern();
 
 		Mockito.when(expenseService.insert(domain)).thenReturn(domain);
@@ -42,7 +42,7 @@ public class ExpenseControllerUnitTest {
 
 	@Test
 	public void updateTest() {
-		final Expense domain= ExpenseConverter.fromDTO(ExpenseMother.getExpenseDTOPattern());
+		final Expense domain= ExpenseConverter.toDomain(ExpenseMother.getExpenseDTOPattern());
 		final ExpenseDTO dto = ExpenseMother.getExpenseDTOPattern();
 
 		Mockito.when(expenseService.update(domain)).thenReturn(domain);
@@ -57,7 +57,7 @@ public class ExpenseControllerUnitTest {
 		final Page<Expense> page= new PageImpl<>(ExpenseMother.getListExpenseModelPattern());
 		Mockito.when(expenseService.findExpensesByUserCode(1L, null)).thenReturn(page);
 
-		final Page<ExpenseDTO> pageDTO= new PageImpl<>(ExpenseConverter.toDTO(ExpenseMother.getListExpenseModelPattern()));
+		final Page<ExpenseDTO> pageDTO= new PageImpl<>(ExpenseConverter.fromDomain(ExpenseMother.getListExpenseModelPattern()));
 		final ResponseEntity<Page<ExpenseDTO>> result = expenseController.findExpensesByUserCode(1L, null);
 
 		Assert.assertEquals(result.getBody().getContent(), pageDTO.getContent());
@@ -71,7 +71,7 @@ public class ExpenseControllerUnitTest {
 		final Page<Expense> page= new PageImpl<>(ExpenseMother.getListExpenseModelPattern());
 		Mockito.when(expenseService.findExpensesByFilter(dto.getDate(), dto.getUserCode(), null)).thenReturn(page);
 
-		final Page<ExpenseDTO> pageDTO= new PageImpl<>(ExpenseConverter.toDTO(ExpenseMother.getListExpenseModelPattern()));
+		final Page<ExpenseDTO> pageDTO= new PageImpl<>(ExpenseConverter.fromDomain(ExpenseMother.getListExpenseModelPattern()));
 		final ResponseEntity<Page<ExpenseDTO>> result = expenseController.findExpensesByFilter(dto, null);
 
 		Assert.assertEquals(result.getBody().getContent(), pageDTO.getContent());

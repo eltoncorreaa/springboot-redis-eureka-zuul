@@ -2,7 +2,7 @@ package com.elton.app.objectfactory;
 
 import org.springframework.stereotype.Component;
 
-import com.elton.app.model.Category;
+import com.elton.app.domain.Category;
 
 
 /**

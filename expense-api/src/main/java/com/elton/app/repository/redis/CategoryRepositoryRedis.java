@@ -2,7 +2,7 @@ package  com.elton.app.repository.redis;
 
 import java.util.Optional;
 
-import com.elton.app.model.Category;
+import com.elton.app.domain.Category;
 
 public interface CategoryRepositoryRedis {
 

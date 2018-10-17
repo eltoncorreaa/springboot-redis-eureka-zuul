@@ -1,4 +1,4 @@
-package  com.elton.app.model;
+package  com.elton.app.domain;
 
 import java.io.Serializable;
 
