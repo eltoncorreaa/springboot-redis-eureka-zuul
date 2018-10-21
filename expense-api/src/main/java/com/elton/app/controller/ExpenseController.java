@@ -26,26 +26,26 @@ public class ExpenseController {
 	@Autowired
 	private ExpenseService expenseService;
 
-	@PostMapping("/api/v1/expenses")
+	@PostMapping("/v1/expenses")
 	public ResponseEntity<ExpenseDTO> insert(@RequestBody final ExpenseDTO dto){
 		final ExpenseDTO result= ExpenseConverter.fromDomain(expenseService.insert(ExpenseConverter.toDomain(dto)));
 		return new ResponseEntity<ExpenseDTO>(result, HttpStatus.OK);
 	}
 
-	@PutMapping("/api/v1/expenses")
+	@PutMapping("/v1/expenses")
 	public ResponseEntity<ExpenseDTO> update(@RequestBody final ExpenseDTO dto){
 		final ExpenseDTO result = ExpenseConverter.fromDomain(expenseService.update(ExpenseConverter.toDomain(dto)));
 		return new ResponseEntity<ExpenseDTO>(result, HttpStatus.OK);
 	}
 
-	@GetMapping("/api/v1/expenses/{userCode}")
+	@GetMapping("/v1/expenses/{userCode}")
 	public ResponseEntity<Page<ExpenseDTO>> findExpensesByUserCode(@PathVariable final Long userCode, final Pageable pageable){
 		final Page<Expense> page = expenseService.findExpensesByUserCode(userCode, pageable);
 		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.fromDomain(page.getContent()), page.getPageable(), page.getTotalElements());
 		return new ResponseEntity<Page<ExpenseDTO>>(result, HttpStatus.OK);
 	}
 
-	@GetMapping("/api/v1/expenses")
+	@GetMapping("/v1/expenses")
 	public ResponseEntity<Page<ExpenseDTO>> findExpensesByFilter(final ExpenseDTO dto, final Pageable pageable){
 		final Page<Expense> page = expenseService.findExpensesByFilter(dto.getDate(), dto.getUserCode(), pageable);
 		final Page<ExpenseDTO> result=  new PageImpl<>(ExpenseConverter.fromDomain(page.getContent()), page.getPageable(), page.getTotalElements());
