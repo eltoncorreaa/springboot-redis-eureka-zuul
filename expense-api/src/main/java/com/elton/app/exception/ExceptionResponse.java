@@ -1,6 +1,9 @@
 package  com.elton.app.exception;
 import java.time.LocalDateTime;
 
+import lombok.Getter;
+
+@Getter
 public class ExceptionResponse {
 
 	private final int code;
@@ -14,21 +17,5 @@ public class ExceptionResponse {
 		this.timestamp = timestamp;
 		this.message = message;
 		this.details = details;
-	}
-
-	public LocalDateTime getTimestamp() {
-		return timestamp;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public int getCode() {
-		return code;
 	}
 }

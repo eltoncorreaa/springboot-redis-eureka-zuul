@@ -8,8 +8,7 @@ import org.springframework.hateoas.ResourceSupport;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Getter @Setter
 public class ExpenseDTO extends ResourceSupport{
 
 	private Long code;

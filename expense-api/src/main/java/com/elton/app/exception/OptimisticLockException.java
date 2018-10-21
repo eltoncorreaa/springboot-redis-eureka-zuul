@@ -11,5 +11,4 @@ public class OptimisticLockException extends RuntimeException{
 	public OptimisticLockException(final String exception) {
 		super(exception);
 	}
-
 }
