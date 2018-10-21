@@ -5,8 +5,7 @@ import org.springframework.hateoas.ResourceSupport;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Getter @Setter
 public class CategoryDTO extends ResourceSupport{
 
 	private Long code;
