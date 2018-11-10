@@ -21,5 +21,6 @@ public class CategoryRepositoryRedisImpl implements CategoryRepositoryRedis{
 		final List<String> listJson= redisTemplate.opsForValue().multiGet(redisTemplate.keys("categories:*"));
 		final List<Category> listCategory= listJson.stream().map(json -> RedisHelper.serializableToObject(json, Category.class)).collect(Collectors.toList());
 		return listCategory.stream().filter(obj -> obj.getDescription().contains(description)).collect(Collectors.toList());
+
 	}
 }
