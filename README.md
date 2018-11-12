@@ -1,4 +1,4 @@
-# spring-boot-redis
+# springboot-redis-eureka-zuul
 A simple Spring-Boot RESTful application with Spring Data JPA, Database Relational and Non-Relational Database with Redis.
 
 ### To download Redis: 
