@@ -7,7 +7,7 @@ https://redis.io/download
 ### Case use operational system Windows:
 https://github.com/MicrosoftArchive/redis/releases
 
-To run application: 
+Run application in this orders (eureka-api / category-api / expense-api / zuul-api): 
 
 mvn clean install
 
