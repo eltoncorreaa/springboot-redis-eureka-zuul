@@ -1,5 +1,5 @@
-# spring-boot-redis
-A simple Spring-Boot RESTful application with Spring Data JPA, Database Relational and Non-Relational Database with Redis.
+# springboot-redis-eureka-zuul
+A simple Spring-Boot RESTful application with Spring Data JPA, Database Relational and Non-Relational Database with Redis, service discovery with eureka netflix, reverse proxy and load balance with zuul netflix.
 
 ### To download Redis: 
 https://redis.io/download
@@ -7,7 +7,7 @@ https://redis.io/download
 ### Case use operational system Windows:
 https://github.com/MicrosoftArchive/redis/releases
 
-To run application: 
+Run application in this orders (eureka-api / category-api / expense-api / zuul-api): 
 
 mvn clean install
 
