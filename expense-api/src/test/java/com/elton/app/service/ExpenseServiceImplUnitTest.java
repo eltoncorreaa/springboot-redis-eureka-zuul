@@ -12,11 +12,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.elton.app.builder.CategoryBuilder;
+import com.elton.app.builder.ExpenseBuilder;
 import com.elton.app.domain.Category;
 import com.elton.app.domain.Expense;
 import com.elton.app.exception.OptimisticLockException;
-import com.elton.app.objectfactory.CategoryMother;
-import com.elton.app.objectfactory.ExpenseMother;
 import com.elton.app.repository.CategoryRepository;
 import com.elton.app.repository.ExpenseRepository;
 import com.elton.app.repository.redis.CategoryRepositoryRedis;
@@ -41,9 +41,9 @@ public class ExpenseServiceImplUnitTest {
 
 	@Test
 	public void insertWithExistingCategoryInRedisTest() {
-		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
-		Optional<Category> optionalCategory= Optional.of(CategoryMother.getCategoryModelWithId());
-		final Expense modelWithoutId = ExpenseMother.getExpenseModelWithoutId();
+		final Expense modelWithId =ExpenseBuilder.getExpenseModelWithId();
+		Optional<Category> optionalCategory= Optional.of(CategoryBuilder.getCategoryModelWithId());
+		final Expense modelWithoutId = ExpenseBuilder.getExpenseModelWithoutId();
 
 		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(optionalCategory);
 		Mockito.when(expenseRepository.save(modelWithoutId)).thenReturn(modelWithId);
@@ -54,8 +54,8 @@ public class ExpenseServiceImplUnitTest {
 
 	@Test
 	public void insertWithExistingCategoryInRelationalDatabaseTest() {
-		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
-		final Expense modelWithoutId = ExpenseMother.getExpenseModelWithoutId();
+		final Expense modelWithId =ExpenseBuilder.getExpenseModelWithId();
+		final Expense modelWithoutId = ExpenseBuilder.getExpenseModelWithoutId();
 
 		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(Optional.empty());
 		Mockito.when(categoryRepository.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(modelWithoutId.getCategory());
@@ -67,8 +67,8 @@ public class ExpenseServiceImplUnitTest {
 
 	@Test
 	public void insertWithCategoryNonExistentTest() {
-		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
-		final Expense modelWithoutId = ExpenseMother.getExpenseModelWithoutCategory();
+		final Expense modelWithId =ExpenseBuilder.getExpenseModelWithId();
+		final Expense modelWithoutId = ExpenseBuilder.getExpenseModelWithoutCategory();
 
 		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(Optional.empty());
 		Mockito.when(categoryRepository.findByDescriptionEqualsIgnoreCase(modelWithoutId.getCategory().getDescription())).thenReturn(null);
@@ -81,8 +81,8 @@ public class ExpenseServiceImplUnitTest {
 
 	@Test
 	public void updateWithCategoryNonExistentTest() {
-		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
-		final Expense modelWitCategoryWithoutId = ExpenseMother.getExpenseModelWithCategoryWithoutId();
+		final Expense modelWithId =ExpenseBuilder.getExpenseModelWithId();
+		final Expense modelWitCategoryWithoutId = ExpenseBuilder.getExpenseModelWithCategoryWithoutId();
 		final Optional<Expense> optionalExpense = Optional.of(modelWithId);
 
 		Mockito.when(categoryRepositoryRedis.findByDescriptionEqualsIgnoreCase(modelWitCategoryWithoutId.getCategory().getDescription())).thenReturn(Optional.empty());
@@ -101,8 +101,8 @@ public class ExpenseServiceImplUnitTest {
 	@Test
 	public void updateWithExistingCategoryAndOptimisticLockErrorTest() {
 		exception.expect(OptimisticLockException.class);
-		final Expense modelWithId =ExpenseMother.getExpenseModelWithId();
-		final Expense modelUpdated = ExpenseMother.getExpenseModelWithId();
+		final Expense modelWithId =ExpenseBuilder.getExpenseModelWithId();
+		final Expense modelUpdated = ExpenseBuilder.getExpenseModelWithId();
 		modelUpdated.setVersion(1);
 		final Optional<Expense> optionalExpense = Optional.of(modelUpdated);
 

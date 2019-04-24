@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.elton.app.exception.CategoryNotFoundException;
 import com.elton.app.repository.CategoryRepository;
@@ -37,12 +36,12 @@ public class Category implements Serializable {
 	@Column(name = "DESCRIPTION", nullable = false, length = 200)
 	private String description;
 
-	@Transient @Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
-	private CategoryRepository categoryRepository;
-	@Transient @Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
-	private CategoryRepositoryRedis categoryRepositoryRedis;
+	@Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
+	private transient CategoryRepository categoryRepository;
+	@Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
+	private transient CategoryRepositoryRedis categoryRepositoryRedis;
 
-	public Category (){}
+	public Category (){/*Standard Builder*/}
 
 	public Category(final CategoryRepository categoryRepository, final CategoryRepositoryRedis categoryRepositoryRedis){
 		this.categoryRepository = categoryRepository;

@@ -13,9 +13,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.elton.app.builder.CategoryBuilder;
 import com.elton.app.domain.Category;
 import com.elton.app.exception.CategoryNotFoundException;
-import com.elton.app.objectfactory.CategoryMother;
 import com.elton.app.repository.CategoryRepository;
 import com.elton.app.repository.redis.CategoryRepositoryRedis;
 
@@ -34,11 +34,11 @@ public class CategoryServiceImplUnitTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 
-	private static final String DESCRIPTION_MODEL_TEST = CategoryMother.DESCRIPTION_MODEL_TEST;
+	private static final String DESCRIPTION_MODEL_TEST = CategoryBuilder.DESCRIPTION_MODEL_TEST;
 
 	@Test
 	public void findCategorySuggestionByDescriptionTest() {
-		final List<Category> listCategory= CategoryMother.getListCategoryModelPattern();
+		final List<Category> listCategory= CategoryBuilder.getListCategoryModelPattern();
 
 		Mockito.when(categoryRepositoryRedis.findCategorySuggestionByDescription(DESCRIPTION_MODEL_TEST)).thenReturn(new ArrayList<>());
 		Mockito.when(categoryRepository.findByDescriptionContainingIgnoreCase(DESCRIPTION_MODEL_TEST)).thenReturn(listCategory);

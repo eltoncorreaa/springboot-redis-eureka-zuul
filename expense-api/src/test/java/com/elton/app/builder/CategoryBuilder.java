@@ -1,4 +1,4 @@
-package com.elton.app.objectfactory;
+package com.elton.app.builder;
 
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import com.elton.app.domain.Category;
  * reusable entities. View in: http://martinfowler.com/bliki/ObjectMother.html
  */
 @Component
-public class CategoryMother {
+public class CategoryBuilder {
 
 	public static final String DESCRIPTION_MODEL_TEST = "Description Category";
 

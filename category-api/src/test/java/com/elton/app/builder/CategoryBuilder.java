@@ -1,4 +1,4 @@
-package com.elton.app.objectfactory;
+package com.elton.app.builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import com.elton.app.dto.CategoryDTO;
  * entidades reutilizáveis Ver: http://martinfowler.com/bliki/ObjectMother.html
  */
 @Component
-public class CategoryMother {
+public class CategoryBuilder {
 
 	public static final String DESCRIPTION_MODEL_TEST = "Description Category";
 	public static final String DESCRIPTION_DTO_TEST = "Description DTO";

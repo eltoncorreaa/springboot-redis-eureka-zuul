@@ -13,9 +13,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
+import com.elton.app.builder.CategoryBuilder;
 import com.elton.app.domain.Category;
 import com.elton.app.exception.CategoryNotFoundException;
-import com.elton.app.objectfactory.CategoryMother;
 import com.elton.app.service.CategoryService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,7 +35,7 @@ public class CategoryControllerUnitTest {
 	@Test
 	public void findCategorySuggestionByDescriptionTest() {
 		final String description = "Test";
-		final List<Category> listReturn= CategoryMother.getListCategoryModelPattern();
+		final List<Category> listReturn= CategoryBuilder.getListCategoryModelPattern();
 		Mockito.when(categoryService.findCategorySuggestionByDescription(description)).thenReturn(listReturn);
 		final ResponseEntity<?> teste = categoryController.findCategorySuggestionByDescription(description);
 		Assert.assertEquals(teste.getStatusCode().value(), HTTP_STATUS_OK);

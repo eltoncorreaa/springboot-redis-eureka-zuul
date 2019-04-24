@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.springframework.data.domain.Page;
@@ -61,12 +60,12 @@ public class Expense implements Serializable {
 	@JoinColumn(name = "ID_CATEGORY", referencedColumnName = "ID_CATEGORY", nullable = true)
 	private Category category;
 
-	@Transient @Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
-	private ExpenseRepository expenseRepository;
-	@Transient @Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
-	private CategoryRepository categoryRepository;
-	@Transient @Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
-	private CategoryRepositoryRedis categoryRepositoryRedis;
+	@Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
+	private transient ExpenseRepository expenseRepository;
+	@Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
+	private transient CategoryRepository categoryRepository;
+	@Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE)
+	private transient CategoryRepositoryRedis categoryRepositoryRedis;
 
 	private static final String OPTIMISTIC_LOCK = "The Expense was update by another transaction.";
 	private static final int SECOND_5 = 5;

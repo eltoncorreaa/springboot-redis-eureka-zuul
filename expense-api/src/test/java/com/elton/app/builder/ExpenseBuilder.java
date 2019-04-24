@@ -1,4 +1,4 @@
-package com.elton.app.objectfactory;
+package com.elton.app.builder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,14 +16,14 @@ import com.elton.app.dto.ExpenseDTO;
  * reusable entities. View in: http://martinfowler.com/bliki/ObjectMother.html
  */
 @Component
-public class ExpenseMother {
+public class ExpenseBuilder {
 
 	public static final String DESCRIPTION_DTO_TEST = "Description Category";
 
 	public static Expense getExpenseModelWithId() {
 		final Expense expense = new Expense();
 		expense.setId(1L);
-		expense.setCategory(CategoryMother.getCategoryModelWithId());
+		expense.setCategory(CategoryBuilder.getCategoryModelWithId());
 		expense.setExpenseDate(LocalDateTime.of(2018, 5, 1, 0, 0, 0));
 		expense.setUserCode(1L);
 		expense.setValue(20);
@@ -33,7 +33,7 @@ public class ExpenseMother {
 
 	public static Expense getExpenseModelWithoutId() {
 		final Expense expense = new Expense();
-		expense.setCategory(CategoryMother.getCategoryModelWithId());
+		expense.setCategory(CategoryBuilder.getCategoryModelWithId());
 		expense.setExpenseDate(LocalDateTime.of(2018, 5, 1, 0, 0, 0));
 		expense.setUserCode(1L);
 		expense.setValue(20);
@@ -43,7 +43,7 @@ public class ExpenseMother {
 
 	public static Expense getExpenseModelWithCategoryWithoutId() {
 		final Expense expense = new Expense();
-		expense.setCategory(CategoryMother.getCategoryModelWithoutId());
+		expense.setCategory(CategoryBuilder.getCategoryModelWithoutId());
 		expense.setExpenseDate(LocalDateTime.of(2018, 5, 1, 0, 0, 0));
 		expense.setUserCode(1L);
 		expense.setValue(20);

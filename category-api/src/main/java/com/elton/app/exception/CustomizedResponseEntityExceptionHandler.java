@@ -16,10 +16,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	private static final int NOT_FOUND = 404;
 
 	@ExceptionHandler(CategoryNotFoundException.class)
-	public final ResponseEntity<ExceptionResponse> handleCategoryNotFoundException(final CategoryNotFoundException ex,
-			final WebRequest request) {
-		final ExceptionResponse exceptionResponse = new ExceptionResponse(NOT_FOUND, LocalDateTime.now(),
-				ex.getMessage(), request.getDescription(false));
+	public final ResponseEntity<ExceptionResponse> handleCategoryNotFoundException(final CategoryNotFoundException ex, final WebRequest request) {
+		final ExceptionResponse exceptionResponse = new ExceptionResponse(NOT_FOUND, LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
 }
